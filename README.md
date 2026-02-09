@@ -2,7 +2,7 @@
 
 > A minimalist, high-performance configuration for the **lf** terminal file manager.
 
-![License](https://img.shields.io/github/license/sarkoidose/lf?style=flat-square)
+![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)
 ![Stars](https://img.shields.io/github/stars/sarkoidose/lf?style=flat-square)
 ![Language](https://img.shields.io/github/languages/top/sarkoidose/lf?style=flat-square)
 
@@ -48,6 +48,7 @@ To get the most out of this config, install:
 - `wl-copy` (for clipboard)
 - `trash-cli` (for the trash command)
 - `poppler` (for `pdftoppm`)
+- `fzf` (for search)
 
 ---
 *Generated with ❤️ for a minimalist workflow.*
