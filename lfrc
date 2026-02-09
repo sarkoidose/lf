@@ -53,6 +53,18 @@ cmd mkfile :{{
     touch "$ans"
 }}
 
+# Recherche FZF (Jump)
+cmd fzf_jump ${{
+    res="$(find . -maxdepth 3 | fzf --reverse --header='Aller vers:')"
+    if [ -n "$res" ]; then
+        if [ -d "$res" ]; then
+            lf -remote "send $id cd \"$res\""
+        else
+            lf -remote "send $id select \"$res\""
+        fi
+    fi
+}}
+
 # --- Mappings ---
 
 map . set hidden!
@@ -69,6 +81,7 @@ map X extract
 map Y ${{ printf "%s" "$f" | wl-copy && lf -remote "send $id echo Chemin copié" }}
 map n mkdir
 map N mkfile
+map f fzf_jump
 
 # Navigation rapide
 map gD cd ~/Downloads

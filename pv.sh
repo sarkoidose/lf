@@ -28,6 +28,12 @@ case "$mimetype" in
         exit 1
         ;;
 
+    # --- ARCHIVES ---
+    application/zip|application/x-tar|application/x-7z-compressed|application/x-rar|application/x-gzip)
+        7z l "$file" 2>/dev/null || tar -tf "$file"
+        exit 0
+        ;;
+
     # --- TEXTE / CODE ---
     text/*|application/json|application/javascript|*+xml)
         bat --color=always --style=plain --terminal-width="$w" "$file" 2>/dev/null || cat "$file"
