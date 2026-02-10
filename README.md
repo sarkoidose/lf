@@ -11,6 +11,7 @@
 ## ✨ Features
 
 - 🖼️ **Image Previews**: Ultra-fast Sixel rendering using `chafa`.
+- 🔍 **Gnosis-Diff**: Built-in TUI diff tool for comparing files (`gd`).
 - 📄 **PDF Support**: Quick preview of PDF documents.
 - 🌈 **Syntax Highlighting**: Beautiful code previews with `bat`.
 - 📦 **One-Key Archive**: Extract almost any archive format with `X`.
@@ -28,6 +29,7 @@
 | `Y` | Copy full path to clipboard (`wl-copy`) |
 | `o` | Open with system default (`xdg-open`) |
 | `D` | Move to trash |
+| `gd` | Compare marked file with current file (**Gnosis-Diff**) |
 | `e` | Edit with `$EDITOR` |
 | `.` | Toggle hidden files |
 
