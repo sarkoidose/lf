@@ -1,4 +1,4 @@
-# 📁 lf-config
+# lf-config
 
 > A minimalist, high-performance configuration for the **lf** terminal file manager.
 
@@ -8,32 +8,33 @@
 
 ---
 
-## ✨ Features
+## Features
 
-- 🖼️ **Image Previews**: Ultra-fast Sixel rendering using `chafa`.
-- 🔍 **Gnosis-Diff**: Built-in TUI diff tool for comparing files (`gd`).
-- 📄 **PDF Support**: Quick preview of PDF documents.
-- 🌈 **Syntax Highlighting**: Beautiful code previews with `bat`.
-- 📦 **One-Key Archive**: Extract almost any archive format with `X`.
-- 📋 **Clipboard Integration**: Copy full file paths instantly with `Y`.
-- 🗑️ **Safe Trash**: Integration with `trash-put` (D) to avoid accidental loss.
-- 🚀 **Fast Creation**: Create folders (`n`) and files (`N`) on the fly.
+- **Image Previews**: Ultra-fast Sixel rendering using `chafa`.
+- **Gnosis-Diff**: Built-in TUI diff tool for comparing files (`gd`).
+- **PDF Support**: Quick preview of PDF documents.
+- **Syntax Highlighting**: Code previews with `bat`.
+- **Archive Management**: List and extract multiple archive formats (zip, tar, 7z, rar).
+- **Clipboard Integration**: Copy full file paths to system clipboard.
+- **Safe Trash**: Integration with `trash-put` to avoid accidental loss.
+- **Quick Creation**: Create folders and files on the fly.
 
-## ⌨️ Keybindings
+## Keybindings
 
 | Key | Action |
 | :--- | :--- |
 | `n` | Create a new directory |
 | `N` | Create a new file |
-| `X` | Extract archive (zip, tar, 7z, rar, etc.) |
-| `Y` | Copy full path to clipboard (`wl-copy`) |
-| `o` | Open with system default (`xdg-open`) |
+| `X` | Extract archive |
+| `Y` | Copy full path to clipboard |
+| `o` | Open with system default |
 | `D` | Move to trash |
 | `gd` | Compare marked file with current file (**Gnosis-Diff**) |
 | `e` | Edit with `$EDITOR` |
 | `.` | Toggle hidden files |
+| `f` | Jump to file/folder (**fzf**) |
 
-## 🛠️ Installation
+## Installation
 
 ```bash
 # Clone the repo
@@ -44,13 +45,12 @@ chmod +x ~/.config/lf/*.sh
 ```
 
 ### Dependencies
-To get the most out of this config, install:
-- `chafa` (for images)
-- `bat` (for code preview)
-- `wl-copy` (for clipboard)
-- `trash-cli` (for the trash command)
-- `poppler` (for `pdftoppm`)
-- `fzf` (for search)
+- `chafa` (images)
+- `bat` (syntax)
+- `wl-copy` (clipboard)
+- `trash-cli` (trash)
+- `poppler` (pdf)
+- `fzf` (search)
 
 ---
-*Generated with ❤️ for a minimalist workflow.*
+*Maintained by sarkoidose.*
