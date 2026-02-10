@@ -65,6 +65,15 @@ cmd fzf_jump ${{
     fi
 }}
 
+# Gnosis-Diff (Comparer deux fichiers)
+cmd gdiff ${{
+    if [ $(echo "$fx" | wc -l) -ge 1 ]; then
+        ~/gemini/venv/bin/python ~/gemini/gnosis-diff/gnosis_diff.py "$fx" "$f"
+    else
+        echo "Marquez d'abord un fichier avec [Espace]"
+    fi
+}}
+
 # --- Mappings ---
 
 map . set hidden!
@@ -82,6 +91,7 @@ map Y ${{ printf "%s" "$f" | wl-copy && lf -remote "send $id echo Chemin copié"
 map n mkdir
 map N mkfile
 map f fzf_jump
+map gd gdiff
 
 # Navigation rapide
 map gD cd ~/Downloads
