@@ -67,7 +67,7 @@ cmd fzf_jump ${{
 
 # Gnosis-Diff (Comparer deux fichiers)
 cmd gdiff ${{
-    if [ $(echo "$fx" | wc -l) -ge 1 ]; then
+    if [ $(echo "$fx" | wc -l) -ge 2 ]; then
         ~/gemini/venv/bin/python ~/gemini/gnosis-diff/gnosis_diff.py "$fx" "$f"
     else
         echo "Marquez d'abord un fichier avec [Espace]"
@@ -79,7 +79,7 @@ cmd gdiff ${{
 map . set hidden!
 map e $$EDITOR "$f"
 map i $$PAGER "$f"
-map o &$xdg-open "$f"
+map o &xdg-open "$f"
 
 # Suppression
 map D trash
