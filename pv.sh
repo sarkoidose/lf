@@ -1,10 +1,16 @@
 #!/usr/bin/env zsh
 
-# LF PREVIEWER - ENHANCED VERSION WITH ERROR HANDLING
+# LF PREVIEWER - REFACTORED FOR RELIABILITY
 
 file="$1"
 w="$2"
 h="$3"
+
+# Setup cleanup trap for temp files
+cleanup() {
+    rm -f /tmp/lf-pdf-*.jpg
+}
+trap cleanup EXIT
 
 # Check if command exists
 check_cmd() {
@@ -15,50 +21,58 @@ check_cmd() {
     return 0
 }
 
-# Detect file type via MIME
+# Display text with fallback
+display_text() {
+    local fallback="$1"
+    if check_cmd bat 2>/dev/null; then
+        bat --color=always --style=plain --terminal-width="$w" "$file" 2>/dev/null
+    else
+        eval "$fallback"
+    fi
+}
+
+# Get MIME type
 mimetype=$(file --mime-type -b "$file")
 
 case "$mimetype" in
     # Images
     image/*)
         check_cmd chafa || exit 0
-        chafa -f sixel --size "${w}x${h}" --speed 9 --animate false --polite on "$file"
-        exit 1
+        timeout 5 chafa -f sixel --size "${w}x${h}" --speed 9 --animate false --polite on "$file"
+        exit 0
         ;;
 
     # PDF
     application/pdf)
-        check_cmd pdftoppm || exit 0
-        check_cmd chafa || exit 0
-        pdftoppm -f 1 -l 1 -scale-to 800 -jpeg -singlefile "$file" /tmp/lf-pdf
-        chafa -f sixel --size "${w}x${h}" --speed 9 --polite on /tmp/lf-pdf.jpg
-        rm -f /tmp/lf-pdf.jpg
-        exit 1
+        check_cmd pdftoppm chafa || exit 0
+        tmpfile="/tmp/lf-pdf-$$.jpg"
+        if timeout 5 pdftoppm -f 1 -l 1 -scale-to 800 -jpeg -singlefile "$file" "${tmpfile%.*}" 2>/dev/null; then
+            timeout 5 chafa -f sixel --size "${w}x${h}" --speed 9 --polite on "$tmpfile"
+        fi
+        exit 0
         ;;
 
     # Archives
     application/zip|application/x-tar|application/x-7z-compressed|application/x-rar|application/x-gzip)
-        7z l "$file" 2>/dev/null || tar -tf "$file"
-        exit 0
+        if check_cmd 7z 2>/dev/null; then
+            7z l "$file" 2>/dev/null && exit 0
+        fi
+        if check_cmd tar 2>/dev/null; then
+            tar -tf "$file" 2>/dev/null && exit 0
+        fi
+        echo "Error: No archive tool available"
+        exit 1
         ;;
 
     # Text and code
     text/*|application/json|application/javascript|*+xml)
-        if check_cmd bat 2>/dev/null; then
-            bat --color=always --style=plain --terminal-width="$w" "$file" 2>/dev/null
-        else
-            cat "$file"
-        fi
+        display_text "cat \"\$file\""
         exit 0
         ;;
 
     # Default
     *)
-        if check_cmd bat 2>/dev/null; then
-            bat --color=always --style=plain --terminal-width="$w" "$file" 2>/dev/null
-        else
-            file -b "$file"
-        fi
+        display_text "file -b \"\$file\""
         exit 0
         ;;
 esac
