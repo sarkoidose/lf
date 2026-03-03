@@ -1,3 +1,4 @@
 #!/bin/sh
-# Ce script nettoie l'aperçu pour éviter les résidus d'images
+# Clean up temporary files created by previewer
+rm -f /tmp/lf-pdf-*.jpg
 exit 0
