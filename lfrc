@@ -17,14 +17,13 @@ set cleaner ~/.config/lf/cleaner.sh
 # --- Custom Commands ---
 
 # Move to trash
-cmd trash ${
-    clear
-    trash-put ${(f)fx}
-    lf -remote "send $id echo Files moved to trash"
-}
+cmd trash {{
+    trash-put $fx
+    lf -remote "send $id echo ✓ Files moved to trash"
+}}
 
 # Extract archives
-cmd extract ${
+cmd extract {{
     case "$f" in
         *.tar.bz2) tar xjf "$f" ;;
         *.tar.gz) tar xzf "$f" ;;
@@ -41,35 +40,35 @@ cmd extract ${
             exit 1
             ;;
     esac && lf -remote "send $id echo ✓ Extraction successful"
-}
+}}
 
 # Create directory
-cmd mkdir :{
+cmd mkdir {{
     printf "Folder name: "
-    read -r ans || return
-    [ -z "$ans" ] && return
+    read -r ans || exit
+    [ -z "$ans" ] && exit
     if mkdir -p "$ans"; then
         lf -remote "send $id echo ✓ Folder created: $ans"
     else
         lf -remote "send $id echo ❌ Error: Failed to create folder"
     fi
-}
+}}
 
 # Create file
-cmd mkfile :{
+cmd mkfile {{
     printf "File name: "
-    read -r ans || return
-    [ -z "$ans" ] && return
+    read -r ans || exit
+    [ -z "$ans" ] && exit
     if touch "$ans"; then
         lf -remote "send $id echo ✓ File created: $ans"
     else
         lf -remote "send $id echo ❌ Error: Failed to create file"
     fi
-}
+}}
 
 # Search with FZF (Jump)
-cmd fzf_jump ${
-    res="$(find . -maxdepth 3 -type f -o -type d 2>/dev/null | fzf --reverse --header='Go to:')"
+cmd fzf_jump {{
+    res="$(find . -maxdepth 3 2>/dev/null | fzf --reverse --header='Go to:')"
     if [ -n "$res" ]; then
         if [ -d "$res" ]; then
             lf -remote "send $id cd \"$res\""
@@ -77,15 +76,15 @@ cmd fzf_jump ${
             lf -remote "send $id select \"$res\""
         fi
     fi
-}
+}}
 
 # Gnosis-Diff (Compare two files)
-cmd gdiff ${
+cmd gdiff {{
     GNOSIS_DIFF="${GNOSIS_DIFF:-$HOME/gemini/gnosis-diff/gnosis_diff.py}"
     
     if [ ! -f "$GNOSIS_DIFF" ]; then
         lf -remote "send $id echo ❌ Error: gnosis-diff not found at $GNOSIS_DIFF"
-        return
+        exit
     fi
     
     if [ $(echo "$fx" | wc -l) -ge 2 ]; then
@@ -93,7 +92,7 @@ cmd gdiff ${
     else
         lf -remote "send $id echo ⚠️ Mark a file first with [Space]"
     fi
-}
+}}
 
 # --- Keybindings ---
 
@@ -103,7 +102,7 @@ map i $$PAGER "$f"
 map o &xdg-open "$f"
 
 # Deletion
-map D trash
+map d trash
 map <delete> trash
 
 # Utilities
