@@ -1,8 +1,6 @@
 #!/usr/bin/env zsh
 
-# =======================================================
 # LF PREVIEWER - ENHANCED VERSION WITH ERROR HANDLING
-# =======================================================
 
 file="$1"
 w="$2"
@@ -11,7 +9,7 @@ h="$3"
 # Check if command exists
 check_cmd() {
     if ! command -v "$1" &> /dev/null; then
-        echo "❌ Error: '$1' not found. Install it to enable previews."
+        echo "Error: '$1' not found. Install it to enable previews."
         return 1
     fi
     return 0
@@ -21,14 +19,14 @@ check_cmd() {
 mimetype=$(file --mime-type -b "$file")
 
 case "$mimetype" in
-    # --- IMAGES ---
+    # Images
     image/*)
         check_cmd chafa || exit 0
         chafa -f sixel --size "${w}x${h}" --speed 9 --animate false --polite on "$file"
         exit 1
         ;;
 
-    # --- PDF ---
+    # PDF
     application/pdf)
         check_cmd pdftoppm || exit 0
         check_cmd chafa || exit 0
@@ -38,13 +36,13 @@ case "$mimetype" in
         exit 1
         ;;
 
-    # --- ARCHIVES ---
+    # Archives
     application/zip|application/x-tar|application/x-7z-compressed|application/x-rar|application/x-gzip)
         7z l "$file" 2>/dev/null || tar -tf "$file"
         exit 0
         ;;
 
-    # --- TEXT / CODE ---
+    # Text and code
     text/*|application/json|application/javascript|*+xml)
         if check_cmd bat 2>/dev/null; then
             bat --color=always --style=plain --terminal-width="$w" "$file" 2>/dev/null
@@ -54,7 +52,7 @@ case "$mimetype" in
         exit 0
         ;;
 
-    # --- DEFAULT ---
+    # Default
     *)
         if check_cmd bat 2>/dev/null; then
             bat --color=always --style=plain --terminal-width="$w" "$file" 2>/dev/null
