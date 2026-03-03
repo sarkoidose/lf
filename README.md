@@ -45,26 +45,38 @@ git clone https://github.com/sarkoidose/lf.git ~/.config/lf
 chmod +x ~/.config/lf/*.sh
 ```
 
-### Dependencies
+## Dependencies
 
-Install these for full functionality:
+### Core
+- `lf` - File manager
+- `fzf` - Fuzzy finder (for `f` keybinding)
+- `trash-cli` - Safe deletion (for `D` keybinding)
+
+### Preview & Display
+- `chafa` - Image to Sixel conversion
+- `bat` - Syntax highlighting for text
+- `poppler` - PDF utilities (includes `pdftoppm`)
+- `wl-clipboard` - Wayland clipboard (for `Y` keybinding)
+
+### Archive Tools
+- `p7zip` - 7z support (includes `7z`)
+- `unrar` - RAR extraction
+- Plus built-in: `tar`, `gzip`, `bzip2`, `unzip`
+
+### Optional
+- `gnosis-diff` - Advanced file comparison (for `gd` keybinding)
+
+## Verify Installation
+
+Check which dependencies are installed:
 
 ```bash
-# Required
-sudo pacman -S lf fzf trash-cli  # or apt/brew/etc
-
-# Optional (for previews)
-sudo pacman -S chafa bat poppler wl-clipboard unrar p7zip
-```
-
-### Verify Installation
-
-```bash
-# Check all dependencies
-for cmd in lf fzf trash-put chafa bat wl-copy pdftoppm 7z unzip; do
+for cmd in lf fzf trash-put chafa bat wl-copy pdftoppm 7z unrar; do
     command -v "$cmd" >/dev/null && echo "✓ $cmd" || echo "✗ $cmd missing"
 done
 ```
+
+Missing tools will show errors when used, but won't break lf.
 
 ## Configuration
 
@@ -74,7 +86,6 @@ If your `gnosis-diff` installation is at a different location, set the environme
 
 ```bash
 export GNOSIS_DIFF=/path/to/gnosis_diff.py
-# Then launch lf
 lf
 ```
 
@@ -89,16 +100,22 @@ cmd gdiff ${
 
 ## Troubleshooting
 
-### Missing `chafa` → images not previewed
-Install: `sudo pacman -S chafa` (or equivalent for your OS)
+### Images not previewing
+Missing `chafa`. Install it and restart lf.
 
-### Missing `bat` → code not syntax-highlighted
-Install: `sudo pacman -S bat` (or equivalent for your OS)
+### Code not syntax-highlighted
+Missing `bat`. Install it and restart lf.
 
-### `wl-copy` not found → clipboard copy fails
-Install: `sudo pacman -S wl-clipboard` (Wayland) or `xclip` (X11)
+### Clipboard copy (`Y`) fails
+Missing `wl-copy` (Wayland). On X11, use `xclip` or `xsel` instead.
 
-All errors will be reported in lf's message bar when you try to use a feature with missing dependencies.
+### Archives won't extract
+Missing archive tools (`7z`, `unrar`, etc.). Install the required tool for your archive format.
+
+### PDFs not previewing
+Missing `pdftoppm` (usually comes with `poppler`). Install it.
+
+All missing dependencies will show error messages in lf when you try to use them.
 
 ---
 
