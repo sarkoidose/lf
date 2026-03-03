@@ -10,8 +10,8 @@ set preview true
 set previewer ~/.config/lf/pv.sh
 set cleaner ~/.config/lf/cleaner.sh
 
-# Simple delete command
-cmd delete %rm -rf "$f"
+# Delete command
+cmd delete !rm -rf "$f"
 
 # Keybindings
 map d delete
@@ -19,9 +19,8 @@ map D delete
 map <delete> delete
 
 map . set hidden!
-map <enter> open
-map e $editor "$f"
-map i $pager "$f"
+map e !$editor "$f"
+map i !$pager "$f"
 map o &$opener "$f"
 
 map n push :mkdir<space>
