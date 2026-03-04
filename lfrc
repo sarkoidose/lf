@@ -38,17 +38,38 @@ cmd extract ${{
 }}
 
 # Create directory
-cmd mkdir :{{
+cmd mkdir %{{
     printf "Nom du dossier: "
     read ans
     mkdir -p "$ans"
 }}
 
 # Create file
-cmd mkfile :{{
+cmd mkfile %{{
     printf "Nom du fichier: "
     read ans
     touch "$ans"
+}}
+
+# fzf jump
+cmd fzf_jump ${{
+    res="$(find . -maxdepth 5 2>/dev/null | fzf --reverse --header='Jump to location')"
+    if [ -f "$res" ]; then
+        cmd="select"
+    elif [ -d "$res" ]; then
+        cmd="cd"
+    fi
+    lf -remote "send $id $cmd \"$res\""
+}}
+
+# Gnosis-Diff
+cmd gdiff ${{
+    GNOSIS_DIFF="${GNOSIS_DIFF:-$HOME/.local/share/gnosis_diff/gnosis_diff.py}"
+    if ! [ -f "$GNOSIS_DIFF" ]; then
+        lf -remote "send $id echo 'gnosis-diff introuvable. Définir GNOSIS_DIFF.'"
+        exit 1
+    fi
+    python3 "$GNOSIS_DIFF" $fx
 }}
 
 # --- Keybindings ---
@@ -67,6 +88,8 @@ map X extract
 map Y ${{ printf "%s" "$f" | wl-copy && lf -remote "send $id echo Chemin copié" }}
 map n mkdir
 map N mkfile
+map f fzf_jump
+map gd gdiff
 
 # Quick navigation
 map gD cd ~/Downloads
