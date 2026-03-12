@@ -38,7 +38,11 @@ case "$mimetype" in
     # Images
     image/*)
         check_cmd chafa || exit 0
-        timeout 5 chafa -f sixel --size "${w}x${h}" --speed 9 --animate false --polite on "$file"
+        if [ -n "$KITTY_WINDOW_ID" ]; then
+            timeout 5 chafa -f kitty --passthrough tmux --size "${w}x${h}" --animate false "$file"
+        else
+            timeout 5 chafa -f sixel --size "${w}x${h}" --speed 9 --animate false --polite on "$file"
+        fi
         exit 0
         ;;
 
