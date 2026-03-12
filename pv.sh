@@ -38,16 +38,17 @@ case "$mimetype" in
     # Images
     image/*)
         check_cmd chafa || exit 0
-        timeout 5 chafa -f sixel --size "${w}x${h}" --speed 9 --animate false --polite on "$file"
+        chafa --size "${w}x${h}" --animate false "$file" 2>/dev/null
         exit 0
         ;;
 
     # PDF
     application/pdf)
-        check_cmd pdftoppm chafa || exit 0
+        check_cmd pdftoppm || exit 0
+        check_cmd chafa || exit 0
         tmpfile="/tmp/lf-pdf-$$.jpg"
         if timeout 5 pdftoppm -f 1 -l 1 -scale-to 800 -jpeg -singlefile "$file" "${tmpfile%.*}" 2>/dev/null; then
-            timeout 5 chafa -f sixel --size "${w}x${h}" --speed 9 --polite on "$tmpfile"
+            chafa --size "${w}x${h}" "$tmpfile" 2>/dev/null
         fi
         exit 0
         ;;
