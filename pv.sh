@@ -38,7 +38,7 @@ case "$mimetype" in
     # Images
     image/*)
         check_cmd chafa || exit 0
-        timeout 5 chafa -f sixel --size "${w}x${h}" --animate false "$file"
+        timeout 5 chafa -f symbols --size "${w}x${h}" --animate false "$file"
         exit 0
         ;;
 
