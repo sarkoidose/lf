@@ -8,7 +8,7 @@ h="$3"
 
 # Setup cleanup trap for temp files
 cleanup() {
-    rm -f /tmp/lf-pdf-*.jpg
+    rm -f /tmp/lf-pdf-$$.jpg
 }
 trap cleanup EXIT
 
@@ -44,10 +44,11 @@ case "$mimetype" in
 
     # PDF
     application/pdf)
-        check_cmd pdftoppm chafa || exit 0
+        check_cmd pdftoppm || exit 0
+        check_cmd chafa || exit 0
         tmpfile="/tmp/lf-pdf-$$.jpg"
         if timeout 5 pdftoppm -f 1 -l 1 -scale-to 800 -jpeg -singlefile "$file" "${tmpfile%.*}" 2>/dev/null; then
-            timeout 5 chafa -f sixel --size "${w}x${h}" --speed 9 --polite on "$tmpfile"
+            timeout 5 chafa -f symbols --size "${w}x${h}" --animate false "$tmpfile"
         fi
         exit 0
         ;;
